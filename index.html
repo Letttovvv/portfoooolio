@@ -74,17 +74,53 @@
             pointer-events: none;
         }
 
+        /* ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ ФОТОГРАФИЙ */
         .photo {
             position: absolute;
             transform: translate(-50%, -50%);
             pointer-events: none;
             will-change: transform;
+            /* ПРИНУДИТЕЛЬНОЕ ОГРАНИЧЕНИЕ РАЗМЕРА КОНТЕЙНЕРА */
+            max-width: 400px !important;
+            max-height: 500px !important;
+            overflow: hidden !important;
         }
 
         .photo img {
             display: block;
             object-fit: cover;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            /* ПРИНУДИТЕЛЬНОЕ ОГРАНИЧЕНИЕ РАЗМЕРА ИЗОБРАЖЕНИЯ */
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 400px !important;
+            max-height: 500px !important;
+        }
+
+        /* НОВЫЕ РАЗМЕРЫ ФОТОГРАФИЙ С ОГРАНИЧЕНИЯМИ */
+        .photo-small { 
+            width: 200px !important; 
+            height: 280px !important; 
+        }
+        .photo-medium { 
+            width: 250px !important; 
+            height: 350px !important; 
+        }
+        .photo-large { 
+            width: 300px !important; 
+            height: 420px !important; 
+        }
+        .photo-xlarge { 
+            width: 350px !important; 
+            height: 490px !important; 
+        }
+        .photo-landscape { 
+            width: 400px !important; 
+            height: 280px !important; 
+        }
+        .photo-square { 
+            width: 300px !important; 
+            height: 300px !important; 
         }
 
         /* Navigation */
@@ -310,23 +346,32 @@
             .error-message {
                 padding: 20px;
             }
-        }
 
-        /* Photo size variations */
-        .photo-small { width: 180px; height: 240px; }
-        .photo-medium { width: 240px; height: 320px; }
-        .photo-large { width: 300px; height: 400px; }
-        .photo-xlarge { width: 360px; height: 480px; }
-        .photo-landscape { width: 400px; height: 300px; }
-        .photo-square { width: 280px; height: 280px; }
-
-        @media (max-width: 768px) {
-            .photo-small { width: 100px; height: 150px; }
-            .photo-medium { width: 130px; height: 195px; }
-            .photo-large { width: 160px; height: 240px; }
-            .photo-xlarge { width: 190px; height: 285px; }
-            .photo-landscape { width: 240px; height: 180px; }
-            .photo-square { width: 180px; height: 180px; }
+            /* МОБИЛЬНЫЕ РАЗМЕРЫ ФОТОГРАФИЙ */
+            .photo-small { 
+                width: 120px !important; 
+                height: 170px !important; 
+            }
+            .photo-medium { 
+                width: 150px !important; 
+                height: 210px !important; 
+            }
+            .photo-large { 
+                width: 180px !important; 
+                height: 250px !important; 
+            }
+            .photo-xlarge { 
+                width: 210px !important; 
+                height: 290px !important; 
+            }
+            .photo-landscape { 
+                width: 240px !important; 
+                height: 170px !important; 
+            }
+            .photo-square { 
+                width: 180px !important; 
+                height: 180px !important; 
+            }
         }
     </style>
 </head>
@@ -732,7 +777,7 @@
         }
 
         /**
-         * Добавление фотографии в позицию
+         * Добавление фотографии в позицию - С ПРИНУДИТЕЛЬНЫМИ ОГРАНИЧЕНИЯМИ!
          */
         function addPhoto(x, y) {
             const photos = PHOTO_DATA[currentCategory] || [];
@@ -748,9 +793,21 @@
             photoEl.style.top = y + 'px';
             photoEl.style.zIndex = displayedPhotos.length;
 
+            // ПРИНУДИТЕЛЬНО ограничиваем размеры КОНТЕЙНЕРА
+            photoEl.style.maxWidth = '400px';
+            photoEl.style.maxHeight = '500px';
+            photoEl.style.overflow = 'hidden';
+
             const img = document.createElement('img');
             img.src = photo.url;
             img.alt = photo.name;
+            
+            // ПРИНУДИТЕЛЬНО ограничиваем размеры ИЗОБРАЖЕНИЯ
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.maxWidth = '400px';
+            img.style.maxHeight = '500px';
+            img.style.objectFit = 'cover';
             
             // Обработка ошибок загрузки
             img.onerror = () => {

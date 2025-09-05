@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-LIPATOV - Photography Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: white;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+            cursor: crosshair;
+            user-select: none;
+        }
+
+        /* Photo container */
+        #photoContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .photo {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .photo img {
+            display: block;
+            object-fit: cover;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            font-size: 14px;
+            z-index: 1000;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            font-size: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .tab {
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s;
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .tab.active {
+            color: #000;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #000;
+        }
+
+        .tab:hover:not(.active) {
+            color: #333;
+        }
+
+        /* Threshold control */
+        .threshold-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .threshold-label {
+            color: #666;
+        }
+
+        .threshold-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .threshold-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            transition: color 0.2s;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .threshold-btn:hover {
+            color: #000;
+        }
+
+        .threshold-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Counter */
+        .counter {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 13px;
+            color: #666;
+            margin-left: 30px;
+        }
+
+        /* Info tab content */
+        .info-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+            display: none;
+            z-index: 100;
+        }
+
+        .info-content.active {
+            display: block;
+        }
+
+        .info-content h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .info-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .info-content .contact {
+            margin-top: 30px;
+        }
+
+        .info-content a {
+            color: #000;
+            text-decoration: none;
+            border-bottom: 1px solid #000;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            nav {
+                top: 0;
+                bottom: auto;
+                padding: 15px 20px;
+                border-top: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+
+            .logo {
+                font-size: 14px;
+            }
+
+            .tabs {
+                margin-left: auto;
+                flex: initial;
+            }
+
+            .tab {
+                font-size: 13px;
+            }
+
+            .threshold-control,
+            .counter {
+                display: none;
+            }
+
+            .info-content {
+                padding: 20px;
+            }
+
+            .info-content h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* Photo size variations */
+        .photo-small { width: 180px; height: 240px; }
+        .photo-medium { width: 240px; height: 320px; }
+        .photo-large { width: 300px; height: 400px; }
+        .photo-xlarge { width: 360px; height: 480px; }
+        .photo-landscape { width: 400px; height: 300px; }
+        .photo-square { width: 280px; height: 280px; }
+
+        @media (max-width: 768px) {
+            .photo-small { width: 120px; height: 160px; }
+            .photo-medium { width: 160px; height: 213px; }
+            .photo-large { width: 200px; height: 267px; }
+            .photo-xlarge { width: 240px; height: 320px; }
+            .photo-landscape { width: 267px; height: 200px; }
+            .photo-square { width: 187px; height: 187px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="photoContainer"></div>
+    
+    <nav>
+        <div class="logo">N-LIPATOV</div>
+        <div class="tabs">
+            <div class="tab active" data-category="featured">Featured</div>
+            <div class="tab" data-category="iphone">Glitch-art</div>
+            <div class="tab" data-category="film">Film</div>
+            <div class="tab" data-category="info">Info</div>
+        </div>
+        <div class="threshold-control">
+            <span class="threshold-label">Threshold:</span>
+            <div class="threshold-buttons">
+                <button class="threshold-btn" data-action="decrease">−</button>
+                <span class="threshold-value">0020</span>
+                <button class="threshold-btn" data-action="increase">+</button>
+            </div>
+        </div>
+        <div class="counter">
+            <span id="currentIndex">0000</span> / <span id="totalPhotos">0040</span>
+        </div>
+    </nav>
+
+    <div class="info-content" id="infoContent">
+        <h1>Nikita Lipatov</h1>
+        <p>Documentary and portrait photographer based in New York City.</p>
+        <p>Capturing authentic moments through analog and digital mediums since 2015.</p>
+        <p>Available for editorial, commercial, and personal projects worldwide.</p>
+        <div class="contact">
+            <p><a href="mailto:hello@bridgetbaker.com">hello@bridgetbaker.com</a></p>
+            <p><a href="https://instagram.com/bridgetbaker" target="_blank">@bridgetbaker</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const THRESHOLDS = [20, 40, 80, 140, 200];
+        const PHOTO_SIZES = ['small', 'medium', 'large', 'xlarge', 'landscape', 'square'];
+        
+        // Generate sample photos for each category
+        const PHOTO_DATA = {
+            featured: Array.from({length: 40}, (_, i) => ({
+                id: i + 1,
+                url: `https://picsum.photos/seed/featured${i}/400/600`,
+                size: PHOTO_SIZES[Math.floor(Math.random() * PHOTO_SIZES.length)]
+            })),
+            iphone: Array.from({length: 60}, (_, i) => ({
+                id: i + 1,
+                url: `https://picsum.photos/seed/iphone${i}/400/600`,
+                size: PHOTO_SIZES[Math.floor(Math.random() * PHOTO_SIZES.length)]
+            })),
+            film: Array.from({length: 35}, (_, i) => ({
+                id: i + 1,
+                url: `https://picsum.photos/seed/film${i}/400/600`,
+                size: PHOTO_SIZES[Math.floor(Math.random() * PHOTO_SIZES.length)]
+            }))
+        };
+
+        // State
+        let currentCategory = 'featured';
+        let currentThresholdIndex = 0;
+        let currentPhotoIndex = 0;
+        let displayedPhotos = [];
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let distanceTraveled = 0;
+        let photosLoaded = new Set();
+
+        // DOM elements
+        const photoContainer = document.getElementById('photoContainer');
+        const tabs = document.querySelectorAll('.tab');
+        const thresholdValue = document.querySelector('.threshold-value');
+        const thresholdButtons = document.querySelectorAll('.threshold-btn');
+        const currentIndexEl = document.getElementById('currentIndex');
+        const totalPhotosEl = document.getElementById('totalPhotos');
+        const infoContent = document.getElementById('infoContent');
+
+        // Initialize
+        function init() {
+            updateTotalPhotos();
+            setupEventListeners();
+            preloadImages();
+        }
+
+        // Preload images for current category
+        function preloadImages() {
+            const photos = PHOTO_DATA[currentCategory] || [];
+            photos.forEach(photo => {
+                if (!photosLoaded.has(photo.url)) {
+                    const img = new Image();
+                    img.src = photo.url;
+                    photosLoaded.add(photo.url);
+                }
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.category));
+            });
+
+            // Threshold controls
+            thresholdButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.dataset.action === 'increase') {
+                        adjustThreshold(1);
+                    } else {
+                        adjustThreshold(-1);
+                    }
+                });
+            });
+
+            // Mouse movement
+            document.addEventListener('mousemove', handleMouseMove);
+            
+            // Touch support for mobile
+            document.addEventListener('touchmove', handleTouchMove);
+        }
+
+        // Switch tab
+        function switchTab(category) {
+            tabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.category === category);
+            });
+
+            if (category === 'info') {
+                infoContent.classList.add('active');
+                photoContainer.style.display = 'none';
+            } else {
+                infoContent.classList.remove('active');
+                photoContainer.style.display = 'block';
+                
+                if (category !== currentCategory) {
+                    currentCategory = category;
+                    currentPhotoIndex = 0;
+                    clearPhotos();
+                    updateTotalPhotos();
+                    preloadImages();
+                }
+            }
+        }
+
+        // Adjust threshold
+        function adjustThreshold(direction) {
+            currentThresholdIndex = Math.max(0, Math.min(THRESHOLDS.length - 1, currentThresholdIndex + direction));
+            updateThresholdDisplay();
+            clearPhotos();
+        }
+
+        // Update threshold display
+        function updateThresholdDisplay() {
+            const value = THRESHOLDS[currentThresholdIndex];
+            thresholdValue.textContent = String(value).padStart(4, '0');
+        }
+
+        // Update total photos counter
+        function updateTotalPhotos() {
+            const photos = PHOTO_DATA[currentCategory] || [];
+            totalPhotosEl.textContent = String(photos.length).padStart(4, '0');
+        }
+
+        // Handle mouse movement
+        function handleMouseMove(e) {
+            if (currentCategory === 'info') return;
+
+            const deltaX = e.clientX - lastMouseX;
+            const deltaY = e.clientY - lastMouseY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (lastMouseX === 0 && lastMouseY === 0) {
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                return;
+            }
+
+            distanceTraveled += distance;
+            
+            const threshold = THRESHOLDS[currentThresholdIndex];
+            
+            if (distanceTraveled >= threshold) {
+                addPhoto(e.clientX, e.clientY);
+                distanceTraveled = 0;
+            }
+
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        }
+
+        // Handle touch movement (mobile)
+        function handleTouchMove(e) {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                handleMouseMove({
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+            }
+        }
+
+        // Add photo at position
+        function addPhoto(x, y) {
+            const photos = PHOTO_DATA[currentCategory] || [];
+            if (photos.length === 0) return;
+
+            const photo = photos[currentPhotoIndex];
+            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+
+            // Create photo element
+            const photoEl = document.createElement('div');
+            photoEl.className = `photo photo-${photo.size}`;
+            photoEl.style.left = x + 'px';
+            photoEl.style.top = y + 'px';
+            photoEl.style.zIndex = displayedPhotos.length;
+
+            const img = document.createElement('img');
+            img.src = photo.url;
+            img.alt = `Photo ${photo.id}`;
+            photoEl.appendChild(img);
+
+            photoContainer.appendChild(photoEl);
+            displayedPhotos.push(photoEl);
+
+            // Update counter
+            currentIndexEl.textContent = String(currentPhotoIndex).padStart(4, '0');
+
+            // Manage photo limit
+            const threshold = THRESHOLDS[currentThresholdIndex];
+            const maxPhotos = Math.round(200 / threshold) * 2;
+            
+            while (displayedPhotos.length > maxPhotos) {
+                const oldPhoto = displayedPhotos.shift();
+                oldPhoto.remove();
+            }
+        }
+
+        // Clear all photos
+        function clearPhotos() {
+            displayedPhotos.forEach(photo => photo.remove());
+            displayedPhotos = [];
+            currentPhotoIndex = 0;
+            currentIndexEl.textContent = '0000';
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

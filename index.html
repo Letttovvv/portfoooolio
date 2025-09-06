@@ -123,19 +123,19 @@
             height: 300px !important; 
         }
 
-        /* Navigation */
+        /* Navigation - УМЕНЬШЕННАЯ ВЕРСИЯ */
         nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 20px 30px;
+            padding: 10px 30px; /* Было 20px 30px - уменьшили верх/низ в 2 раза */
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
-            gap: 30px;
-            font-size: 14px;
+            gap: 20px; /* Было 30px - уменьшили отступы между элементами */
+            font-size: 13px; /* Было 14px - немного уменьшили шрифт */
             z-index: 1000;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
@@ -143,12 +143,12 @@
         .logo {
             font-weight: 500;
             letter-spacing: -0.5px;
-            font-size: 16px;
+            font-size: 15px; /* Было 16px */
         }
 
         .tabs {
             display: flex;
-            gap: 20px;
+            gap: 15px; /* Было 20px */
             flex: 1;
         }
 
@@ -157,7 +157,7 @@
             color: #666;
             transition: color 0.2s;
             position: relative;
-            padding-bottom: 2px;
+            padding-bottom: 1px; /* Было 2px */
         }
 
         .tab.active {
@@ -178,14 +178,14 @@
             color: #333;
         }
 
-        /* Threshold control */
+        /* Threshold control - УМЕНЬШЕННАЯ ВЕРСИЯ */
         .threshold-control {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px; /* Было 10px */
             margin-left: auto;
             font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 13px;
+            font-size: 12px; /* Было 13px */
         }
 
         .threshold-label {
@@ -198,15 +198,15 @@
         }
 
         .threshold-btn {
-            width: 24px;
-            height: 24px;
+            width: 20px; /* Было 24px */
+            height: 20px; /* Было 24px */
             border: none;
             background: transparent;
             cursor: pointer;
             font-weight: bold;
             color: #666;
             transition: color 0.2s;
-            font-size: 18px;
+            font-size: 16px; /* Было 18px */
             line-height: 1;
         }
 
@@ -220,12 +220,12 @@
             font-weight: 500;
         }
 
-        /* Counter */
+        /* Counter - УМЕНЬШЕННАЯ ВЕРСИЯ */
         .counter {
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 13px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 12px; /* Было 13px */
             color: #666;
-            margin-left: 30px;
+            margin-left: 20px; /* Было 30px */
         }
 
         /* Info tab content */
@@ -272,11 +272,15 @@
             text-align: center;
             color: #666;
             max-width: 400px;
+            font-family: 'Cs-alice-mono', 'SF Mono', Monaco, 'Courier New', monospace;
+            letter-spacing: -0.05em;
         }
 
         .error-message h3 {
             color: #333;
             margin-bottom: 15px;
+            font-family: 'Cs-alice-mono', 'SF Mono', Monaco, 'Courier New', monospace;
+            letter-spacing: -0.05em;
         }
 
         .error-message button {
@@ -287,6 +291,8 @@
             border: none;
             cursor: pointer;
             font-size: 14px;
+            font-family: 'Cs-alice-mono', 'SF Mono', Monaco, 'Courier New', monospace;
+            letter-spacing: -0.05em;
         }
 
         .error-message button:hover {
@@ -298,32 +304,34 @@
             padding: 15px;
             background: #f5f5f5;
             border-radius: 8px;
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-family: 'Cs-alice-mono', 'SF Mono', Monaco, 'Courier New', monospace;
             font-size: 12px;
             text-align: left;
+            letter-spacing: -0.05em;
         }
 
-        /* Mobile styles */
+        /* Mobile styles - УМЕНЬШЕННАЯ ВЕРСИЯ */
         @media (max-width: 768px) {
             nav {
                 top: 0;
                 bottom: auto;
-                padding: 15px 20px;
+                padding: 8px 20px; /* Было 15px 20px - уменьшили в 2 раза */
                 border-top: none;
                 border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             }
 
             .logo {
-                font-size: 14px;
+                font-size: 13px; /* Было 14px */
             }
 
             .tabs {
                 margin-left: auto;
                 flex: initial;
+                gap: 12px; /* Было неявно, добавили меньший отступ */
             }
 
             .tab {
-                font-size: 13px;
+                font-size: 12px; /* Было 13px */
             }
 
             .threshold-control,
